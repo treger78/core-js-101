@@ -209,8 +209,21 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let horizontal = '';
+  let vertical = '';
+  for (let i = 0; i < width - 2; i += 1) {
+    horizontal += '─';
+  }
+  for (let i = 0; i < height - 2; i += 1) {
+    vertical += '│';
+    for (let j = 0; j < width - 2; j += 1) {
+      vertical += ' ';
+    }
+    vertical += '│\n';
+  }
+  // eslint-disable-next-line prefer-template
+  return '┌' + horizontal + '┐\n' + vertical + '└' + horizontal + '┘\n';
 }
 
 
@@ -286,8 +299,45 @@ function isString(value) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  function getDigit(val) {
+    let res;
+    if (val[0] === 'A') {
+      res = 1;
+    } else if (val[0] === 'J') {
+      res = 11;
+    } else if (val[0] === 'Q') {
+      res = 12;
+    } else if (val[0] === 'K') {
+      res = 13;
+    } else {
+      res = Number(val[0]);
+    }
+    return res;
+  }
+  let res;
+  if (value[1] === '♣') {
+    res = getDigit(value);
+  } else if (value[1] === '♦') {
+    res = getDigit(value);
+    res += 13;
+  } else if (value[1] === '♥') {
+    res = getDigit(value);
+    res += 13 * 2;
+  } else if (value[1] === '♠') {
+    res = getDigit(value);
+    res += 13 * 3;
+  }
+  if (value[2] === '♣') {
+    res = 10;
+  } else if (value[2] === '♦') {
+    res = 10 + 13;
+  } else if (value[2] === '♥') {
+    res = 10 + (13 * 2);
+  } else if (value[2] === '♠') {
+    res = 10 + (13 * 3);
+  }
+  return res - 1;
 }
 
 
